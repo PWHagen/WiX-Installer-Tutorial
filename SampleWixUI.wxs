@@ -1,23 +1,12 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-  <Product Name='Foobar 1.0' Id='97C522EE-52EA-42D1-AC4E-DF707ACC45AC' UpgradeCode='918EDCA2-D954-4B63-828E-FDF1021C8DCF'
+  <Product Name='Foobar 1.0' Id='719E90BF-F6EB-4AF9-A017-C8B565D8EAE2' UpgradeCode='8765DE31-C7A3-4CB2-B497-7EE828043B3D'
     Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Acme Ltd.'>
 
     <Package Id='*' Keywords='Installer'
       Description="Acme's Foobar 1.0 Installer"
       Comments='Foobar is a registered trademark of Acme Ltd.' Manufacturer='Acme Ltd.'
       InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
-
-    <Property Id="INSTALLDIR">
-      <RegistrySearch Id='AcmeFoobarRegistry' Type='raw'
-        Root='HKLM' Key='Software\Acme\Foobar 1.0' Name='InstallDir' />
-    </Property>
-
-    <Property Id="FILEEXISTS">
-      <DirectorySearch Id="CheckFileDir" Path="[INSTALLDIR]" Depth="0">
-        <FileSearch Id="CheckFile" Name="Lookfor.txt" />
-      </DirectorySearch>
-    </Property>
 
     <Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
     <Property Id='DiskPrompt' Value="Acme's Foobar 1.0 Installation [1]" />
@@ -27,18 +16,18 @@
         <Directory Id='Acme' Name='Acme'>
           <Directory Id='INSTALLDIR' Name='Foobar 1.0'>
 
-            <Component Id='MainExecutable' Guid='73173E71-953C-4D62-BC16-B8F2A863A699'>
+            <Component Id='MainExecutable' Guid='38268B74-ADBD-4916-AA1B-ABC5CDDD0532'>
               <File Id='FoobarEXE' Name='FoobarAppl10.exe' DiskId='1' Source='FoobarAppl10.exe' KeyPath='yes'>
                 <Shortcut Id="startmenuFoobar10" Directory="ProgramMenuDir" Name="Foobar 1.0" WorkingDirectory='INSTALLDIR' Icon="Foobar10.exe" IconIndex="0" Advertise="yes" />
                 <Shortcut Id="desktopFoobar10" Directory="DesktopFolder" Name="Foobar 1.0" WorkingDirectory='INSTALLDIR' Icon="Foobar10.exe" IconIndex="0" Advertise="yes" />
               </File>
             </Component>
 
-            <Component Id='HelperLibrary' Guid='F29F800E-64C4-48AE-8770-15E037CC324B'>
+            <Component Id='HelperLibrary' Guid='03F81A62-2610-4258-B356-E8D2BC6D563C'>
               <File Id='HelperDLL' Name='Helper.dll' DiskId='1' Source='Helper.dll' KeyPath='yes' />
             </Component>
 
-            <Component Id='Manual' Guid='93074A86-285C-4EAA-93B0-0EA5B4675931'>
+            <Component Id='Manual' Guid='D752EA91-926A-4C94-842E-7126E99F6910'>
               <File Id='Manual' Name='Manual.pdf' DiskId='1' Source='Manual.pdf' KeyPath='yes'>
                 <Shortcut Id="startmenuManual" Directory="ProgramMenuDir" Name="Instruction Manual" Advertise="yes" />
               </File>
@@ -50,7 +39,7 @@
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="Foobar 1.0">
-          <Component Id="ProgramMenuDir" Guid="DCA63562-87A8-4B4A-AD31-6D3711E88AEB">
+          <Component Id="ProgramMenuDir" Guid="C3E33FB2-F245-4EB8-B268-4E4EF6147FCF">
             <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
             <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
           </Component>
@@ -60,18 +49,21 @@
       <Directory Id="DesktopFolder" Name="Desktop" />
     </Directory>
 
-    <Feature Id='Complete' Level='1'>
-      <Feature Id='MainProgram' Level='1'>
+    <Feature Id='Complete' Title='Foobar 1.0' Description='The complete package.'
+      Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
+      <Feature Id='MainProgram' Title='Program' Description='The main executable.' Level='1'>
         <ComponentRef Id='MainExecutable' />
         <ComponentRef Id='HelperLibrary' />
       <ComponentRef Id='ProgramMenuDir' />
       </Feature>
 
-      <Feature Id='Documentation' Level='1'>
+      <Feature Id='Documentation' Title='Description' Description='The instruction manual.' Level='1000'>
         <ComponentRef Id='Manual' />
-        <Condition Level="0">FILEEXISTS</Condition>
       </Feature>
     </Feature>
+
+    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_ErrorProgressText" />
 
     <Icon Id="Foobar10.exe" SourceFile="FoobarAppl10.exe" />
 
